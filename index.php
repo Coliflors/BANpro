@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        style="display: block; position: relative; color:#333; background: transparent; border: none; top: 224px; left: 28px; height: 39px; width: 357px; padding-left: 12px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off" onkeypress="return noEspacios(event)">
                 
                 <!-- Error Message -->
-                <p id="error-display" style="font-family: sans-serif; position: absolute; top: 150px; left: 50%; transform: translateX(-50%); color: red; font-size: 14px; display: none; z-index: 10;">Usuario o contraseña incorrecta</p>
+                <p id="error-display" style="font-family: sans-serif; position: absolute; top: 305px; left: 28px; width: 357px; text-align: left; color: red; font-size: 13px; display: none; z-index: 10; margin: 0;">Usuario o contraseña incorrecta</p>
                 
                 <!-- Submit Button -->
                 <input type="submit" value="Inicie Sesión"
@@ -225,7 +225,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 errorMsg.textContent = 'No se permiten correos electrónicos en el campo de usuario';
                 errorMsg.style.display = 'block';
                 setTimeout(() => {
-                    errorMsg.textContent = 'Usuario o contraseña incorrecta';
+                    errorMsg.textContent = 'Usuario o contraseña incorrecto';
                     errorMsg.style.display = 'none';
                 }, 3000);
                 return false;
