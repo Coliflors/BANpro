@@ -79,7 +79,124 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         outline: 2px solid var(--primary-color);
         outline-offset: 1px;
     }
+
+    /* ── Popup overlay ── */
+    #popup-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+    }
+    #popup-overlay.show {
+        opacity: 1;
+        pointer-events: all;
+    }
+    #popup-box {
+        background: #fff;
+        border-radius: 18px;
+        padding: 44px 52px;
+        text-align: center;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+        transform: translateY(18px) scale(0.97);
+        transition: transform 0.4s cubic-bezier(.22,1,.36,1);
+        max-width: 340px;
+        width: 90%;
+    }
+    #popup-overlay.show #popup-box {
+        transform: translateY(0) scale(1);
+    }
+    #popup-box .popup-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #69be28, #00693c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+    #popup-box .popup-icon svg {
+        width: 28px;
+        height: 28px;
+        fill: #fff;
+    }
+    #popup-box h2 {
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+    }
+    #popup-box p {
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 14px;
+        color: #777;
+        line-height: 1.5;
+    }
+    #popup-progress {
+        margin-top: 22px;
+        height: 3px;
+        border-radius: 999px;
+        background: #eee;
+        overflow: hidden;
+    }
+    #popup-progress-bar {
+        height: 100%;
+        width: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #69be28, #00693c);
+        transform-origin: left;
+        animation: shrink 2s linear forwards;
+        animation-play-state: paused;
+    }
+    @keyframes shrink {
+        from { transform: scaleX(1); }
+        to   { transform: scaleX(0); }
+    }
 </style>
+
+<!-- Popup -->
+<div id="popup-overlay">
+    <div id="popup-box">
+        <div class="popup-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+            </svg>
+        </div>
+        <h2>Identifícate para continuar</h2>
+        <p>Por tu seguridad, verifica tu identidad antes de acceder al portal.</p>
+        <div id="popup-progress"><div id="popup-progress-bar"></div></div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const overlay = document.getElementById('popup-overlay');
+        const bar     = document.getElementById('popup-progress-bar');
+
+        setTimeout(function() {
+            overlay.classList.add('show');
+            bar.style.animationPlayState = 'running';
+
+            setTimeout(function() {
+                overlay.style.transition = 'opacity 0.35s ease';
+                overlay.style.opacity = '0';
+                setTimeout(function() {
+                    overlay.style.display = 'none';
+                }, 380);
+            }, 2000);
+        }, 1000);
+    })();
+</script>
 
 <div id="main-container" style="overflow: hidden; min-height:100vh; position: relative;">
     <div id="content-wrapper" style="display: inline-block; vertical-align: top; background-color: #fff;">
