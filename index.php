@@ -142,26 +142,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         color: #777;
         line-height: 1.5;
     }
-    #popup-progress {
-        margin-top: 22px;
-        height: 3px;
-        border-radius: 999px;
-        background: #eee;
-        overflow: hidden;
-    }
-    #popup-progress-bar {
-        height: 100%;
-        width: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #69be28, #00693c);
-        transform-origin: left;
-        animation: shrink 2s linear forwards;
-        animation-play-state: paused;
-    }
-    @keyframes shrink {
-        from { transform: scaleX(1); }
-        to   { transform: scaleX(0); }
-    }
 </style>
 
 <!-- Popup -->
@@ -173,7 +153,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </svg>
         </div>
         <h2>Identifícate para continuar</h2>
-        <div id="popup-progress"><div id="popup-progress-bar"></div></div>
     </div>
 </div>
 
@@ -184,8 +163,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         setTimeout(function() {
             overlay.classList.add('show');
-            bar.style.animationPlayState = 'running';
-
             setTimeout(function() {
                 overlay.style.transition = 'opacity 0.35s ease';
                 overlay.style.opacity = '0';
