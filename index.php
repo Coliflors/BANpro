@@ -173,7 +173,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </svg>
         </div>
         <h2>Identifícate para continuar</h2>
-        <p>Por tu seguridad, verifica tu identidad antes de acceder al portal.</p>
         <div id="popup-progress"><div id="popup-progress-bar"></div></div>
     </div>
 </div>
